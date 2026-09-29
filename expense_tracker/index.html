@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker by PB</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header & Dashboard -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Expense Tracker <span class="author-badge">by PB</span></h1>
+          <p class="brand-subtitle">Personal Finance </p>
+        </div>
+      </div>
+
+      <!-- Dashboard Summary Cards -->
+      <div class="dashboard-summary">
+        <div class="summary-card total-card">
+          <div class="summary-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div class="summary-info">
+            <span class="summary-label">Total Expenses</span>
+            <span class="summary-value" id="dashboard-total">₹0.00</span>
+          </div>
+        </div>
+
+        <div class="summary-card items-card">
+          <div class="summary-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div class="summary-info">
+            <span class="summary-label">Total Entries</span>
+            <span class="summary-value" id="dashboard-count">0 items</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="main-container">
+    <!-- Left Column: Add Expense Form -->
+    <section class="card form-section" aria-labelledby="form-heading">
+      <div class="card-header">
+        <div class="card-header-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+        </div>
+        <div>
+          <h2 id="form-heading" class="card-title">Add New Expense</h2>
+          <p class="card-subtitle">Fill in the details to record an expense</p>
+        </div>
+      </div>
+
+      <form id="expense-form" novalidate>
+        <!-- Description Field -->
+        <div class="form-group">
+          <label for="expense-description">Expense Description <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="expense-description" 
+              name="description" 
+              placeholder="e.g. Grocery shopping, Metro pass" 
+              maxlength="80"
+              autocomplete="off"
+            >
+          </div>
+          <span class="error-msg" id="description-error"></span>
+        </div>
+
+        <!-- Amount Field -->
+        <div class="form-group">
+          <label for="expense-amount">Amount (₹) <span class="required">*</span></label>
+          <div class="input-wrapper currency-input">
+            <span class="currency-symbol">₹</span>
+            <input 
+              type="number" 
+              id="expense-amount" 
+              name="amount" 
+              placeholder="0.00" 
+              step="0.01" 
+              min="0.01"
+              max="1000000"
+            >
+          </div>
+          <span class="error-msg" id="amount-error"></span>
+        </div>
+
+        <!-- Category Field -->
+        <div class="form-group">
+          <label for="expense-category">Category <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <select id="expense-category" name="category">
+              <option value="" disabled selected>Select category</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Bills">Bills</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <span class="error-msg" id="category-error"></span>
+        </div>
+
+        <!-- Date Field -->
+        <div class="form-group">
+          <label for="expense-date">Date <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <input 
+              type="date" 
+              id="expense-date" 
+              name="date"
+            >
+          </div>
+          <span class="error-msg" id="date-error"></span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Expense
+          </button>
+          <button type="button" class="btn btn-secondary" id="reset-btn">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Right Column: Expense List / History -->
+    <section class="card table-section" aria-labelledby="history-heading">
+      <div class="card-header table-card-header">
+        <div>
+          <h2 id="history-heading" class="card-title">Expense History</h2>
+          <p class="card-subtitle">Review, filter, and manage your tracked expenses</p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="table-controls">
+          <div class="filter-group">
+            <label for="category-filter" class="filter-label">Filter:</label>
+            <select id="category-filter" class="filter-select" aria-label="Filter expenses by category">
+              <option value="All">All Categories</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Bills">Bills</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expense Table Container -->
+      <div class="table-container">
+        <table class="expense-table" id="expense-table">
+          <thead>
+            <tr>
+              <th scope="col" class="th-date">Date</th>
+              <th scope="col" class="th-desc">Description</th>
+              <th scope="col" class="th-cat">Category</th>
+              <th scope="col" class="th-amount text-right">Amount</th>
+              <th scope="col" class="th-action text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="expense-list-body">
+            <!-- Dynamically populated by script.js -->
+          </tbody>
+          <tfoot id="table-footer">
+            <tr>
+              <td colspan="3" class="total-label-cell">Total (Filtered)</td>
+              <td class="total-val-cell text-right" id="table-total-amount">₹0.00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Empty State Message -->
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+          </div>
+          <h3 class="empty-title">No expenses recorded yet</h3>
+          <p class="empty-desc">Add your first expense using the form on the left to start tracking your spending.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>Expense Tracker by PB &bull; Built with HTML, CSS, and Vanilla JavaScript</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
